@@ -8,12 +8,8 @@ function cleanPaths(input: string): string[] {
         .filter(s => s.length !== 0)
         .map(s => fspath.normalize(s))
         .filter(s => !fspath.isAbsolute(s))
-        // .map(s => `./${s}`)
-        .map(s => s.replace(/^\.\/\.$/g, "."))
         .map(s => s.replace(/^!\.\//g, "!"))
-        .map(s => s.replace(/[/]$/g, ""))
-        .map(s => s.trim())
-        .filter(s => s.length !== 0);
+        .map(s => s.replace(/[/]$/g, ""));
 }
 
 function matchPaths(includedPaths: string[], directory: string): boolean {
