@@ -13,7 +13,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
+    "test": "jest --coverage",
     "all": "yearn run build && yearn run format && yearn run lint && yearn run package && yearn run test"
   },
   "dependencies": {
