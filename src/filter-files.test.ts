@@ -4,6 +4,19 @@ describe("filterFiles", () => {
 
     describe("no include or exclude", () => {
 
+        it("all undefined", () => {
+            const result = filterFiles(
+                undefined,
+                undefined,
+                undefined
+            );
+
+            expect(result)
+                .toStrictEqual({
+                    changed: []
+                });
+        })
+
         it("all empty", () => {
             const result = filterFiles(
                 "      ",
@@ -87,6 +100,21 @@ describe("filterFiles", () => {
                         "production",
                         "modules/humans",
                         "modules/teams/engineers",
+                        "modules/teams/leads",
+                    ]
+                });
+        })
+
+        it("normalizes paths", () => {
+            const result = filterFiles(
+                "",
+                "modules/teams/leads/",
+                "modules/teams/leads"
+            );
+
+            expect(result)
+                .toStrictEqual({
+                    changed: [
                         "modules/teams/leads",
                     ]
                 });
