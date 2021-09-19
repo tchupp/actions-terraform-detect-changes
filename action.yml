@@ -49,6 +49,9 @@ runs:
         changed_tf_directories=( $(echo "${changed_tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
         tf_directories=( $(echo "${tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
 
+        echo "changed_tf_directories: ${changed_tf_directories}"
+        echo "tf_directories: ${tf_directories}"
+
         echo "::set-output name=changed_tf_directories::${changed_tf_directories}"
         echo "::set-output name=tf_directories::${tf_directories}"
     - name: Echos
