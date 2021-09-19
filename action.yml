@@ -44,15 +44,19 @@ runs:
             ;;
         esac
 
-        echo "before: tf_files: ${tf_files}"
         tf_files=$(find . -iname '*.tf')
-        echo "after: tf_files: ${tf_files}"
 
         changed_tf_directories=( $(echo "${changed_tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
         tf_directories=( $(echo "${tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
 
         echo "::set-output name=changed_tf_directories::${changed_tf_directories}"
         echo "::set-output name=tf_directories::${tf_directories}"
+    - name: Echos
+      id: echos
+      shell: bash
+      run: |
+        echo "changed_tf_directories: ${{ steps.find-tf-files.outputs.changed_tf_directories }}"
+        echo "tf_directories: ${{ steps.find-tf-files.outputs.tf_directories }}"
     - name: Filter and Encode Output
       id: encode
       uses: actions/github-script@v4
