@@ -37,6 +37,7 @@ runs:
           "push")
             git fetch origin "${{ github.event.before }}"
             changed_tf_files=$(git --no-pager diff-tree --name-only -r ${{ github.event.before }}..${{ github.event.after }} | awk '{print "./"$1}')
+            echo "changed_tf_files: ${changed_tf_files}"
             ;;
 
           *)
