@@ -1,0 +1,74 @@
+name: 'Terraform Detect Changes'
+description: 'GitHub Action for detecting changes to terraform files'
+branding:
+  icon: 'package'
+  color: 'blue'
+inputs:
+  included-paths:
+    description: "Comma-separated paths to narrow down the search for terraform changes. Defaults to all if not specified."
+    required: false
+    default: ""
+outputs:
+  changed:
+    description: "JSON encoded object that contains the changed files. '{ changed: Array<string> }'"
+    value: ${{ steps.encode.outputs.result }}
+runs:
+  using: "composite"
+  steps:
+    - name: Build
+      id: build
+      shell: bash
+      run: |
+        yarn install
+        yarn run build
+    - name: Find *.tf files
+      id: find-tf-files
+      shell: bash
+      run: |
+        case "${{ github.event_name }}" in
+
+          "pull_request")
+            base_ref="${GITHUB_BASE_REF}"
+
+            git fetch origin "${base_ref}"
+            changed_tf_files=$(git --no-pager diff --name-only HEAD "origin/${base_ref}" | awk '{print "./"$1}')
+            ;;
+
+          "push")
+            git fetch origin "${{ github.event.before }}"
+            changed_tf_files=$(git --no-pager diff-tree --name-only -r ${{ github.event.before }}..${{ github.event.after }} | awk '{print "./"$1}')
+            ;;
+
+          *)
+            changed_tf_files=$(find . -iname '*.tf')
+            ;;
+        esac
+
+        tf_files=$(find . -iname '*.tf')
+
+        changed_tf_directories=( $(echo "${changed_tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
+        tf_directories=( $(echo "${tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
+
+        echo "::set-output name=changed_tf_directories::${changed_tf_directories}"
+        echo "::set-output name=tf_directories::${tf_directories}"
+    - name: Filter and Encode Output
+      id: encode
+      uses: actions/github-script@v4
+      env:
+        INCLUDED_PATHS: ${{ inputs.included-paths }}
+#        CHANGED_TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.changed_tf_directories }}
+#        TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.tf_directories }}
+      with:
+        result-encoding: string
+        script: |
+          const script = require('./dist/index.js');
+
+          const rawIncludedPaths = process.env.INCLUDED_PATHS;
+          const rawChangedTfDirectories = process.env.CHANGED_TF_DIRECTORIES;
+          const rawTfDirectories = process.env.TF_DIRECTORIES;
+
+          return script(
+            rawIncludedPaths,
+            rawChangedTfDirectories,
+            rawTfDirectories,
+          );
