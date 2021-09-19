@@ -37,7 +37,6 @@ runs:
           "push")
             git fetch origin "${{ github.event.before }}"
             changed_tf_files=$(git --no-pager diff-tree --name-only -r ${{ github.event.before }}..${{ github.event.after }} | awk '{print "./"$1}')
-            echo "changed_tf_files: ${changed_tf_files}"
             ;;
 
           *)
@@ -45,7 +44,9 @@ runs:
             ;;
         esac
 
+        echo "before: tf_files: ${tf_files}"
         tf_files=$(find . -iname '*.tf')
+        echo "after: tf_files: ${tf_files}"
 
         changed_tf_directories=( $(echo "${changed_tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
         tf_directories=( $(echo "${tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
