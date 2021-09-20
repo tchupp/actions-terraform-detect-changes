@@ -20,7 +20,7 @@ runs:
       shell: bash
       run: |
         yarn install
-        yarn run build
+        yarn run package
     - name: Find *.tf files
       id: find-tf-files
       shell: bash --noprofile --norc {0}
