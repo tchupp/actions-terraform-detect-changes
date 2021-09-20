@@ -23,7 +23,7 @@ runs:
         yarn run build
     - name: Find *.tf files
       id: find-tf-files
-      shell: bash
+      shell: bash --noprofile --norc -eo {0}
       run: |
         case "${{ github.event_name }}" in
 
