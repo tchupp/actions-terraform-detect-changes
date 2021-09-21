@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        path: ${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}
+        path: ${{ fromJSON(needs.terraform-detect-changes.outputs.changed).changed }}
         env:
           - development
           - staging
