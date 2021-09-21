@@ -1,7 +1,7 @@
 name: build+test1
 
 on:
-  - push
+  - pull_request
 
 jobs:
   terraform-detect-changes:
