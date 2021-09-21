@@ -30,6 +30,8 @@ jobs:
       - run: |
           echo "${{ needs.terraform-detect-changes.outputs.changed }}"
           echo "${{ needs.terraform-detect-changes.outputs.changed.changed }}"
+          echo "${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}"
+          echo "${{ fromJSON(needs.terraform-detect-changes.outputs.changed).changed }}"
 
   terraform:
     name: "Terraform"
@@ -37,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        path: ${{ fromJSON(needs.terraform-detect-changes.outputs.changed.changed) }}
+        path: ${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}
         env:
           - development
           - staging
