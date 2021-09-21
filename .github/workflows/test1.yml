@@ -18,6 +18,7 @@ jobs:
       - name: check output
         shell: bash
         run: |
+          echo "${{ steps.action.outputs.changed }}"
           echo "${{ fromJSON(steps.action.outputs.changed) }}"
 
   terraform:
