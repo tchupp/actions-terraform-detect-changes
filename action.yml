@@ -78,7 +78,7 @@ runs:
           const rawChangedTfDirectories = process.env.CHANGED_TF_DIRECTORIES;
           const rawTfDirectories = process.env.TF_DIRECTORIES;
 
-          return script(
+          return script.default(
             rawIncludedPaths,
             rawChangedTfDirectories,
             rawTfDirectories,
