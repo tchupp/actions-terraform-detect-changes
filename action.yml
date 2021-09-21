@@ -11,16 +11,10 @@ inputs:
 outputs:
   changed:
     description: "JSON encoded object that contains the changed files. '{ changed: Array<string> }'"
-    value: ${{ steps.encode.outputs.result }}
+    value: ${{ steps.filter.outputs.result }}
 runs:
   using: "composite"
   steps:
-    - name: Build
-      id: build
-      shell: bash
-      run: |
-        yarn install
-        yarn run package
     - name: Find *.tf files
       id: find-tf-files
       shell: bash --noprofile --norc {0}
@@ -54,16 +48,14 @@ runs:
 
         echo "::set-output name=changed_tf_directories::${changed_tf_directories}"
         echo "::set-output name=tf_directories::${tf_directories}"
-    - name: Echos
-      id: echos
+    - name: Build
+      id: build
       shell: bash
       run: |
-        echo "changed_tf_directories: ${{ steps.find-tf-files.outputs.changed_tf_directories }}"
-        echo "tf_directories: ${{ steps.find-tf-files.outputs.tf_directories }}"
-        pwd
-        ls -lah
+        yarn install
+        yarn run package
     - name: Filter and Encode Output
-      id: encode
+      id: filter
       uses: actions/github-script@v4
       env:
         INCLUDED_PATHS: ${{ inputs.included-paths }}
@@ -83,3 +75,7 @@ runs:
             rawChangedTfDirectories,
             rawTfDirectories,
           );
+    - name: check output
+      shell: bash
+      run: |
+        echo "${{ steps.filter.outputs.changed }}"
