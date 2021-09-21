@@ -4,9 +4,37 @@ on:
   - push
 
 jobs:
-  build-test:
+  terraform-detect-changes:
+    name: "Terraform Detect Changes"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: ./
+
+      - name: Detect Terraform Changes
+        uses: ./
+        id: action
+
+      - name: check output
+        shell: bash
+        run: |
+          echo "${{ fromJSON(steps.action.outputs.changed) }}"
+
+  terraform:
+    name: "Terraform"
+    needs: terraform-detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.terraform-detect-changes.outputs.changed.changed) }}
+        env:
+          - development
+          - staging
+          - production
+    env:
+      TF_WORKSPACE: "${{ matrix.path }}-${{ matrix.env }}"
+    steps:
+      - name: Checkout
+        run: |
+          echo "path: ${{ matrix.path }}"
+          echo "env: ${{ matrix.env }}"

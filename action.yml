@@ -74,7 +74,3 @@ runs:
             rawChangedTfDirectories,
             rawTfDirectories,
           );
-    - name: check output
-      shell: bash
-      run: |
-        echo "${{ steps.filter.outputs.result }}"
