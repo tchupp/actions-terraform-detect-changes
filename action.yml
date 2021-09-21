@@ -62,7 +62,6 @@ runs:
         CHANGED_TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.changed_tf_directories }}
         TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.tf_directories }}
       with:
-        result-encoding: string
         script: |
           const script = require('./dist/index.js');
 
