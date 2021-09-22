@@ -17,21 +17,20 @@ jobs:
         uses: ./
         id: action
 
-      - name: check output
-        shell: bash
-        run: |
-          echo "${{ steps.action.outputs.changed }}"
-
   echo-test:
     name: "Echo Test"
     needs: terraform-detect-changes
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "${{ needs.terraform-detect-changes.outputs.changed }}"
-          echo "${{ needs.terraform-detect-changes.outputs.changed.changed }}"
-          echo "${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}"
-          echo "${{ fromJSON(needs.terraform-detect-changes.outputs.changed).changed }}"
+          if [[ "${{ needs.terraform-detect-changes.outputs.changed }}" != "[]" ]]; then
+            echo "Wanted '[]', but got '${{ needs.terraform-detect-changes.outputs.changed }}'"
+            exit 1
+          fi
+          if [[ "${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}" != "Array" ]]; then
+            echo "Wanted 'Array', but got '${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}'"
+            exit 1
+          fi
 
   terraform:
     name: "Terraform"
