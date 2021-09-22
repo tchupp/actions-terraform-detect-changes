@@ -21,3 +21,31 @@ jobs:
       - name: Test
         run: |
           yarn run test
+
+  test-detect-changes:
+    name: "Terraform Detect Changes"
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.detect.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Detect Terraform Changes
+        uses: ./
+        id: detect
+
+  echo-test:
+    name: "Echo Test"
+    needs: test-detect-changes
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [[ "${{ needs.test-detect-changes.outputs.changed }}" != "[]" ]]; then
+            echo "Wanted '[]', but got '${{ needs.test-detect-changes.outputs.changed }}'"
+            exit 1
+          fi
+          if [[ "${{ fromJSON(needs.test-detect-changes.outputs.changed) }}" != "Array" ]]; then
+            echo "Wanted 'Array', but got '${{ fromJSON(needs.test-detect-changes.outputs.changed) }}'"
+            exit 1
+          fi

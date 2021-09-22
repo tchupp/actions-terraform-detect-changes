@@ -17,21 +17,6 @@ jobs:
         uses: ./
         id: action
 
-  echo-test:
-    name: "Echo Test"
-    needs: terraform-detect-changes
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          if [[ "${{ needs.terraform-detect-changes.outputs.changed }}" != "[]" ]]; then
-            echo "Wanted '[]', but got '${{ needs.terraform-detect-changes.outputs.changed }}'"
-            exit 1
-          fi
-          if [[ "${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}" != "Array" ]]; then
-            echo "Wanted 'Array', but got '${{ fromJSON(needs.terraform-detect-changes.outputs.changed) }}'"
-            exit 1
-          fi
-
   terraform:
     name: "Terraform"
     needs: terraform-detect-changes
