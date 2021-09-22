@@ -49,3 +49,5 @@ jobs:
             echo "Wanted 'Array', but got '${{ fromJSON(needs.test-detect-changes.outputs.changed) }}'"
             exit 1
           fi
+
+          echo "Success! There should never be any terraform changes in this repo"
