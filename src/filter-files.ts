@@ -35,14 +35,12 @@ export const filterFiles = (
     rawIncludedPaths: string,
     rawChangedTfDirectories: string,
     rawTfDirectories: string,
-): { changed: string[] } => {
+): string[] => {
     const includedPaths = cleanPaths(rawIncludedPaths);
     const inputTfDirectories = cleanPaths(rawTfDirectories);
     const inputChangedTfDirectories = cleanPaths(rawChangedTfDirectories);
 
-    const filteredTfDirectories = inputChangedTfDirectories
+    return inputChangedTfDirectories
         .filter(dir => inputTfDirectories.includes(dir))
         .filter(dir => matchPaths(includedPaths, dir));
-
-    return {changed: filteredTfDirectories};
 }

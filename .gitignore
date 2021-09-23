@@ -18,4 +18,5 @@ gen
 ### NodeJS
 node_modules
 lib
+dist
 coverage
