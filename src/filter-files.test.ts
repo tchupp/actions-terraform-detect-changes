@@ -12,9 +12,7 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: []
-                });
+                .toStrictEqual([]);
         })
 
         it("all empty", () => {
@@ -25,9 +23,7 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: []
-                });
+                .toStrictEqual([]);
         })
 
         it("all changes exist", () => {
@@ -38,16 +34,14 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "dev",
-                        "staging",
-                        "production",
-                        "modules/humans",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    "dev",
+                    "staging",
+                    "production",
+                    "modules/humans",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("removes directories that don't exist", () => {
@@ -58,15 +52,13 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "dev",
-                        "staging",
-                        "production",
-                        "modules/humans",
-                        "modules/teams/engineers",
-                    ]
-                });
+                .toStrictEqual([
+                    "dev",
+                    "staging",
+                    "production",
+                    "modules/humans",
+                    "modules/teams/engineers",
+                ]);
         })
 
         it("only includes directories that changed", () => {
@@ -77,12 +69,10 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "modules/humans",
-                        "modules/teams/engineers",
-                    ]
-                });
+                .toStrictEqual([
+                    "modules/humans",
+                    "modules/teams/engineers",
+                ]);
         })
 
         it("removes absolute paths", () => {
@@ -93,16 +83,14 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "dev",
-                        "staging",
-                        "production",
-                        "modules/humans",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    "dev",
+                    "staging",
+                    "production",
+                    "modules/humans",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("normalizes paths", () => {
@@ -113,11 +101,9 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    "modules/teams/leads",
+                ]);
         })
     })
 
@@ -132,12 +118,10 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                        "dev",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                    "dev",
+                ]);
         })
 
         it("matches single glob", () => {
@@ -148,13 +132,11 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "dev",
-                        "staging",
-                        "production",
-                    ]
-                });
+                .toStrictEqual([
+                    "dev",
+                    "staging",
+                    "production",
+                ]);
         })
 
         it("matches single glob in a subdirectory", () => {
@@ -165,11 +147,9 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "modules/humans",
-                    ]
-                });
+                .toStrictEqual([
+                    "modules/humans",
+                ]);
         })
 
         it("matches double glob", () => {
@@ -180,16 +160,14 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "dev",
-                        "staging",
-                        "production",
-                        "modules/humans",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    "dev",
+                    "staging",
+                    "production",
+                    "modules/humans",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("matches double glob in a subdirectory", () => {
@@ -200,13 +178,11 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "modules/humans",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    "modules/humans",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("matches double glob in a subdirectory with a negative", () => {
@@ -217,12 +193,10 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
     })
 
@@ -235,15 +209,13 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                        "production",
-                        "modules/humans",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                    "production",
+                    "modules/humans",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("matches single glob", () => {
@@ -254,14 +226,12 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                        "modules/humans",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                    "modules/humans",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("matches single glob in a subdirectory", () => {
@@ -272,16 +242,14 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                        "dev",
-                        "staging",
-                        "production",
-                        "modules/teams/engineers",
-                        "modules/teams/leads",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                    "dev",
+                    "staging",
+                    "production",
+                    "modules/teams/engineers",
+                    "modules/teams/leads",
+                ]);
         })
 
         it("matches double glob", () => {
@@ -292,11 +260,9 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                ]);
         })
 
         it("matches double glob in a subdirectory", () => {
@@ -307,14 +273,12 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                        "dev",
-                        "staging",
-                        "production",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                    "dev",
+                    "staging",
+                    "production",
+                ]);
         })
 
         it("matches double glob in a subdirectory", () => {
@@ -325,14 +289,12 @@ describe("filterFiles", () => {
             );
 
             expect(result)
-                .toStrictEqual({
-                    changed: [
-                        ".",
-                        "dev",
-                        "staging",
-                        "production",
-                    ]
-                });
+                .toStrictEqual([
+                    ".",
+                    "dev",
+                    "staging",
+                    "production",
+                ]);
         })
     })
 })
