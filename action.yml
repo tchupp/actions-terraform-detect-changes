@@ -52,8 +52,10 @@ runs:
       id: build
       shell: bash
       run: |
+        pushd $GITHUB_ACTION_PATH
         yarn install
         yarn run package
+        popd
     - name: Filter and Encode Output
       id: filter
       uses: actions/github-script@v4
