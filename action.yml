@@ -65,7 +65,7 @@ runs:
         TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.tf_directories }}
       with:
         script: |
-          const script = require('./dist/index.js');
+          const script = require(`${process.env.GITHUB_ACTION_PATH}/dist/index.js`);
 
           const rawIncludedPaths = process.env.INCLUDED_PATHS;
           const rawChangedTfDirectories = process.env.CHANGED_TF_DIRECTORIES;
