@@ -45,9 +45,10 @@ runs:
 
         tf_directories=( $(echo "${tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
         echo "tf_directories: ${tf_directories[@]}"
+        
+        echo "changed_tf_directories=${changed_tf_directories[@]}" >> $GITHUB_OUTPUT
+        echo "tf_directories=${tf_directories[@]}" >> $GITHUB_OUTPUT
 
-        echo "::set-output name=changed_tf_directories::${changed_tf_directories[@]}"
-        echo "::set-output name=tf_directories::${tf_directories[@]}"
     - name: Build
       id: build
       shell: bash
