@@ -58,7 +58,7 @@ runs:
         popd
     - name: Filter and Encode Output
       id: filter
-      uses: actions/github-script@v4
+      uses: actions/github-script@v6
       env:
         INCLUDED_PATHS: ${{ inputs.included-paths }}
         CHANGED_TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.changed_tf_directories }}
