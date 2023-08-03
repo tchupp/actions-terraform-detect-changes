@@ -15,11 +15,12 @@ inputs:
 outputs:
   changed:
     description: "JSON encoded object that contains the changed files. '{ changed: Array<string> }'"
-    value: ${{ steps.filter.outputs.result }}
+    value: ${{ steps.detect.outputs.result }}
 runs:
   using: "composite"
   steps:
     - uses: tchupp/actions-detect-directory-changes@v1
+      id: detect
       with:
         included-paths: ${{ inputs.included-paths }}
         included-extentions: "tf"
