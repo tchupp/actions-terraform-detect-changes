@@ -42,7 +42,7 @@ jobs:
       - name: Echo Changes
         run: |
           echo "${{ steps.detect.outputs.changed }}"
-          echo "${{ fromJSON(steps.detect.outputs.changed) }}"
+#          echo "${{ fromJSON(steps.detect.outputs.changed) }}"
 
   echo-test:
     name: "Echo Test"
