@@ -39,6 +39,11 @@ jobs:
         uses: ./
         id: detect
 
+      - name: Echo Changes
+        run: |
+          echo "changed=${{ steps.detect.outputs.changed }}"
+          echo "changed=${{ fromJSON(steps.detect.outputs.changed) }}"
+
   echo-test:
     name: "Echo Test"
     needs: test-detect-changes
