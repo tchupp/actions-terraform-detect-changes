@@ -8,72 +8,20 @@ inputs:
     description: "Comma-separated paths to narrow down the search for terraform changes. Defaults to all if not specified."
     required: false
     default: ""
+  if-these-paths-change-return-all-included-paths:
+    description: "If the any terraform files on the following paths change, return all included files. (Comma-separated)"
+    required: false
+    default: ""
 outputs:
   changed:
     description: "JSON encoded object that contains the changed files. '{ changed: Array<string> }'"
-    value: ${{ steps.filter.outputs.result }}
+    value: ${{ steps.detect.outputs.changed }}
 runs:
   using: "composite"
   steps:
-    - name: Find *.tf files
-      id: find-tf-files
-      shell: bash --noprofile --norc {0}
-      run: |
-        case "${{ github.event_name }}" in
-
-          "pull_request")
-            base_ref="${GITHUB_BASE_REF}"
-
-            git fetch origin "${base_ref}"
-            changed_tf_files=$(git --no-pager diff --name-only HEAD "origin/${base_ref}" | awk '{print "./"$1}')
-            ;;
-
-          "push")
-            git fetch origin "${{ github.event.before }}"
-            changed_tf_files=$(git --no-pager diff-tree --name-only -r ${{ github.event.before }}..${{ github.event.after }} | awk '{print "./"$1}')
-            ;;
-
-          *)
-            changed_tf_files=$(find . -iname '*.tf')
-            ;;
-        esac
-
-        tf_files=$(find . -iname '*.tf')
-
-        changed_tf_directories=( $(echo "${changed_tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
-        echo "changed_tf_directories: ${changed_tf_directories[@]}"
-
-        tf_directories=( $(echo "${tf_files}" | grep ".tf" | rev | cut -d '/' -f 2- | rev | grep -v ".tf" | sort -u) )
-        echo "tf_directories: ${tf_directories[@]}"
-        
-        echo "changed_tf_directories=${changed_tf_directories[@]}" >> $GITHUB_OUTPUT
-        echo "tf_directories=${tf_directories[@]}" >> $GITHUB_OUTPUT
-
-    - name: Build
-      id: build
-      shell: bash
-      run: |
-        pushd $GITHUB_ACTION_PATH
-        yarn install
-        yarn run package
-        popd
-    - name: Filter and Encode Output
-      id: filter
-      uses: actions/github-script@v6
-      env:
-        INCLUDED_PATHS: ${{ inputs.included-paths }}
-        CHANGED_TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.changed_tf_directories }}
-        TF_DIRECTORIES: ${{ steps.find-tf-files.outputs.tf_directories }}
+    - uses: tchupp/actions-detect-directory-changes@v1
+      id: detect
       with:
-        script: |
-          const script = require(`${process.env.GITHUB_ACTION_PATH}/dist/index.js`);
-
-          const rawIncludedPaths = process.env.INCLUDED_PATHS;
-          const rawChangedTfDirectories = process.env.CHANGED_TF_DIRECTORIES;
-          const rawTfDirectories = process.env.TF_DIRECTORIES;
-
-          return script.default(
-            rawIncludedPaths,
-            rawChangedTfDirectories,
-            rawTfDirectories,
-          );
+        included-paths: ${{ inputs.included-paths }}
+        included-extensions: "tf"
+        if-these-paths-change-return-all-included-paths: ${{ inputs.if-these-paths-change-return-all-included-paths }}
