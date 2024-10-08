@@ -4,28 +4,6 @@ on:
   - push
 
 jobs:
-  build-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: |
-          yarn install
-
-      - name: Build
-        run: |
-          yarn run build
-
-      - name: Test
-        run: |
-          yarn run test
-
-      - name: Package
-        run: |
-          yarn run package
-
   test-detect-changes:
     name: "Terraform Detect Changes"
     runs-on: ubuntu-latest
