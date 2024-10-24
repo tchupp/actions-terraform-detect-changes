@@ -23,5 +23,5 @@ runs:
       id: detect
       with:
         included-paths: ${{ inputs.included-paths }}
-        included-extensions: "tf"
+        included-extensions: "tf,lock.hcl"
         if-these-paths-change-return-all-included-paths: ${{ inputs.if-these-paths-change-return-all-included-paths }}
